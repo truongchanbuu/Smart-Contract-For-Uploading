@@ -1,0 +1,24 @@
+[package]
+name = "copyrightprotection"
+version = "0.1.1"
+edition = "2021"
+authors = ["Truong Chan Buu <truongbuu1593@gmail.com>"]
+repository = "https://gitlab.com/vbi-academy/contract"
+description = "The Contract For CopyRight Protection"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+near-sdk = "4.1.1"
+unidecode = "0.3.0"
+
+[profile.release]
+codegen-units=1
+opt-level = "z"
+lto = true
+debug = false
+panic = "abort"
+overflow-checks = true

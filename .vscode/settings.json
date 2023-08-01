@@ -1,0 +1,24 @@
+{
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true,
+    "[javascript]": {
+      "editor.formatOnSave": false
+    },
+    "[javascriptreact]": {
+      "editor.formatOnSave": false
+    },
+    "[typescript]": {
+      "editor.formatOnSave": false
+    },
+    "[typescriptreact]": {
+      "editor.formatOnSave": false
+    },
+    "prettier.printWidth": 80, // Maximum line width
+    "prettier.tabWidth": 4, // Number of spaces per indentation level
+    "prettier.singleQuote": true, // Use single quotes instead of double quotes
+    "prettier.trailingComma": "es5", // Use trailing commas where valid in ES5 (objects, arrays, etc.)
+    "prettier.bracketSpacing": true, // Add spaces between brackets in object literals
+    "prettier.jsxBracketSameLine": false, // Put the > of a multi-line JSX element at the end of the last line
+    "prettier.arrowParens": "always" // Include parentheses around a sole arrow function parameter
+}
+  

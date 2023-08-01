@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CopyRight Page</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <style>
+        input {
+            margin-left: 5px;
+            margin-bottom: 10px;
+        }
+        
+        [class^='btn-'] {
+            margin-left: 5px;
+            margin-top: 10px;
+        }
+
+        h2 {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Upload File to Pinata</h1>
+    <form action="/upload" method="post" enctype="multipart/form-data">
+        <input type="text" name="accountId" id="accountId" placeholder="Account ID">
+        <input type="text" name="name" id="name" placeholder="Name of work"> <br>
+        <input type="text" name="fee" id="fee" placeholder="Fee of the work">
+        <input type="file" name="fileInput" id="fileInput"> <br>
+        <button class="btn-upload" type="submit" value="Upload">Upload</button>
+    </form>
+    
+    <h2>Delete content</h2>
+    <input id="cid" type="text" placeholder="CID">
+    <button class="btn-unpin">Delete</button>
+    
+    <!-- Confirm delete -->
+    <div id="deleteModal" hidden>
+        <div class="modal-dialog">
+          <div class="modal-content">
+          
+            <!-- Modal Header -->
+            <div class="modal-header">
+              <h4 class="modal-title">Delete your work</h4>
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            
+            <!-- Modal body -->
+            <div class="modal-body">
+              Do you want to delete <strong class="cid-delete"></strong>?
+            </div>
+            
+            <!-- Modal footer -->
+            <div class="modal-footer">
+              <button type="button" class="btn btn-danger btn-delete">Delete</button>
+              <button type="button" class="btn btn-dark btn-cancel" data-dismiss="modal">Cancel</button>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+
+    <script>
+        const supportedFile = ['docx', 'txt', 'png', 'jpg', 'jpeg', 'mp3', 'wav', 'pdf', 'mp4'];
+
+        document.querySelector('.btn-upload').addEventListener('click', async (e) => {
+            const fileInput = document.getElementById('fileInput');
+            const file = fileInput.files[0];
+
+            const name = document.getElementById('name').value;
+            if (!name) {
+                e.preventDefault();
+                alert('Please enter the name of work');
+                return;
+            }   
+
+            let extension = file.name.split('.')[1];
+
+            if (!file || !supportedFile.includes(extension)) {
+                e.preventDefault();
+                alert('Please select a valid file.');
+                return;
+            }
+        });
+
+        setTimeout(() => {
+            $('#flash-alert').fadeOut(2000)
+        }, 1000);
+
+        
+        $('.btn-unpin').click(e => {
+            let cid = $('#cid').val();
+            if (!cid) {
+                alert('Please enter your cid');
+                return;
+            }
+
+            let accountId = $('#accountId').val();
+            if (!accountId) {
+                alert('Please enter your account id');
+                return;
+            }
+
+            $('strong.cid-delete').html(cid);
+
+            $('#deleteModal').removeAttr('hidden');
+        });
+
+        $('.btn-cancel').click(e => {
+            $('#deleteModal').attr('hidden', true);
+        });
+
+        $('.btn-delete').click(e => {
+            let cid = $('#cid').val();
+            let data = { cid };
+            
+            fetch('/delete', { 
+                method: 'DELETE', 
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data) 
+            })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.code === 1) {
+                        alert('Success');
+                    }
+                    $('#deleteModal').attr('hidden', true); 
+                })
+                .catch(error => {
+                    alert('Invalid CID');
+                    $('#deleteModal').attr('hidden', true);
+                })
+        });
+
+    </script>
+</body>
+</html>
